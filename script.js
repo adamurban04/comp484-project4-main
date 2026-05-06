@@ -12,11 +12,11 @@ const topScoresElement = document.querySelector("#top-scores");
 const scoreboardTitleElement = document.querySelector("#scoreboard-title");
 const originTextByDifficulty = {
     easy: [
-        "Typing fast is easier when your fingers stay relaxed and your eyes stay on the next word.",
-        "Practice every day for a few minutes and your speed will slowly improve.",
-        "Try to stay calm and focus on accuracy before trying to type faster.",
-        "Good posture can help your hands move more comfortably across the keyboard.",
-        "Small daily habits can build strong typing skills over time."
+        "I am cautiously optimistic.",
+        "A great leap forward often requires first taking two steps back.",
+        "In my book, experience outranks everything.",
+        "Great leaders inspire greatness in others.",
+        "Belief is not a matter of choice, but of conviction."
     ],
     medium: [
         "The Empire might have demanded that they sacrifice their souls, but at one point, the majority of those people had been no worse than any others.",
@@ -26,11 +26,8 @@ const originTextByDifficulty = {
         "Obviously, the Rebel Alliance was no better. But one wrong didn't excuse another. She had probably thought about abandoning her post even before he had."
     ],
     hard: [
-        "Even when performance appears stable, tiny inconsistencies in timing, posture, and concentration can compound over longer sessions and create measurable drops in both speed and accuracy.",
-        "A reliable typing rhythm is not built by chasing every second, but by maintaining disciplined correction habits so mistakes are resolved immediately without interrupting overall flow.",
-        "If a typist over-focuses on one difficult phrase, they often lose sentence-level awareness, which causes delayed corrections and a chain reaction of preventable errors.",
-        "Sustained precision under pressure usually comes from deliberate practice with varied sentence structures, punctuation patterns, and word lengths rather than repetition of simple drills.",
-        "In advanced typing tests, strategic attention management matters as much as finger speed, because mentally previewing upcoming words reduces hesitation and improves consistency."
+        "So far as Ciena could tell from the few holos she'd ever been able to watch, most people in the galaxy no longer believed in the Force, the energy that allowed people to become one with the universe. Even she sometimes wondered whether there could ever have been such a thing as a Jedi Knight. The amazing tales the elders told of valiant heroes with lightsabers, who could bend minds, levitate objects... surely those were only stories. But the Force had to be real, because it had brought the Empire to Jelucan to change all their futures, forever.",
+        "Ciena stared down at the viewscreen displaying the images of round-edged, clay-colored buildings seemingly aloft in the clouds. It was so like Jude not to have mentioned the way the filtered sunlight turned the sky an eternal sunset pink, or the elegance of Cloud City's structures, which bloomed above slender unipod cables as though they were parasol sunshades dangling in midair."
     ]
 };
 const SCORES_STORAGE_PREFIX = "typing-test-top-wpm-scores";
@@ -45,10 +42,25 @@ let isCurrentlyMismatch = false;
 let hasRecordedScore = false;
 let wasDisqualified = false;
 let currentDifficulty = "medium";
+const lastPromptIndexByDifficulty = {
+    easy: null,
+    medium: null,
+    hard: null
+};
 
 function setRandomOriginText() {
     const difficultyTexts = originTextByDifficulty[currentDifficulty];
-    const randomIndex = Math.floor(Math.random() * difficultyTexts.length);
+    let randomIndex = Math.floor(Math.random() * difficultyTexts.length);
+    const lastIndex = lastPromptIndexByDifficulty[currentDifficulty];
+
+    // On reset, avoid repeating the same prompt if we have more than one option.
+    if (difficultyTexts.length > 1) {
+        while (randomIndex === lastIndex) {
+            randomIndex = Math.floor(Math.random() * difficultyTexts.length);
+        }
+    }
+
+    lastPromptIndexByDifficulty[currentDifficulty] = randomIndex;
     originTextElement.textContent = difficultyTexts[randomIndex];
 }
 
