@@ -3,10 +3,22 @@ const testArea = document.querySelector("#test-area");
 const originTextElement = document.querySelector("#origin-text p");
 const resetButton = document.querySelector("#reset");
 const theTimer = document.querySelector(".timer");
+const originTextOptions = [
+    "The Empire might have demanded that they sacrifice their souls, but at one point, the majority of those people had been no worse than any others.",
+    "Although Ciena would have liked to have gone down to Cloud City, perhaps to meet Jude's parents, she remained aboard the Executor.",
+    "On Imperial ships, officers were encouraged to drink nutritive beverages instead of consuming food. It was more efficient in terms of both ship resources and officer time, and the medics insisted the nutritives were healthier, too.",
+    "Then they turned away from each other to walk into the crowd, meet new people, and become the citizens of the Empire they were always meant to be.",
+    "Obviously, the Rebel Alliance was no better. But one wrong didn't excuse another. She had probably thought about abandoning her post even before he had."
+];
 
 let timer = [0, 0, 0];
 let intervalId = null;
 let timerRunning = false;
+
+function setRandomOriginText() {
+    const randomIndex = Math.floor(Math.random() * originTextOptions.length);
+    originTextElement.textContent = originTextOptions[randomIndex];
+}
 
 // Add leading zero to numbers 9 or below (purely for aesthetics):
 function leadingZero(time) {
@@ -79,6 +91,7 @@ function reset() {
     testArea.value = "";
     theTimer.textContent = "00:00:00";
     testWrapper.style.borderColor = "grey";
+    setRandomOriginText();
 }
 
 function handleTyping() {
@@ -89,3 +102,4 @@ function handleTyping() {
 // Event listeners for keyboard input and the reset button:
 testArea.addEventListener("input", handleTyping);
 resetButton.addEventListener("click", reset);
+setRandomOriginText();
