@@ -3,6 +3,8 @@ const testArea = document.querySelector("#test-area");
 const originTextElement = document.querySelector("#origin-text p");
 const resetButton = document.querySelector("#reset");
 const theTimer = document.querySelector(".timer");
+const wpmElement = document.querySelector("#wpm");
+const errorsElement = document.querySelector("#errors");
 const originTextOptions = [
     "The Empire might have demanded that they sacrifice their souls, but at one point, the majority of those people had been no worse than any others.",
     "Although Ciena would have liked to have gone down to Cloud City, perhaps to meet Jude's parents, she remained aboard the Executor.",
@@ -14,6 +16,8 @@ const originTextOptions = [
 let timer = [0, 0, 0];
 let intervalId = null;
 let timerRunning = false;
+let errorCount = 0;
+let isCurrentlyMismatch = false;
 
 function setRandomOriginText() {
     const randomIndex = Math.floor(Math.random() * originTextOptions.length);
@@ -47,6 +51,27 @@ function runTimer() {
     const seconds = leadingZero(timer[1]);
     const hundredths = leadingZero(timer[2]);
     theTimer.textContent = `${minutes}:${seconds}:${hundredths}`;
+    updateWpm(testArea.value.length);
+}
+
+function getElapsedSeconds() {
+    return (timer[0] * 60) + timer[1] + (timer[2] / 100);
+}
+
+function updateWpm(totalCharacters) {
+    const elapsedSeconds = getElapsedSeconds();
+
+    if (elapsedSeconds <= 0 || totalCharacters <= 0) {
+        wpmElement.textContent = "0.00";
+        return;
+    }
+
+    const wpm = (totalCharacters / 5) / (elapsedSeconds / 60);
+    wpmElement.textContent = wpm.toFixed(2);
+}
+
+function updateErrorCount() {
+    errorsElement.textContent = `${errorCount}`;
 }
 
 // Match the text entered with the provided text on the page:
@@ -57,6 +82,7 @@ function spellCheck() {
 
     if (typedText.length === 0) {
         testWrapper.style.borderColor = "grey";
+        isCurrentlyMismatch = false;
         return;
     }
 
@@ -66,10 +92,20 @@ function spellCheck() {
         clearInterval(intervalId);
         intervalId = null;
         timerRunning = false;
+        isCurrentlyMismatch = false;
+        updateWpm(typedText.length);
     } else if (typedText === textMatch) {
         testWrapper.style.borderColor = "blue";
+        isCurrentlyMismatch = false;
     } else {
         testWrapper.style.borderColor = "#E95D0F";
+
+        if (!isCurrentlyMismatch) {
+            errorCount += 1;
+            updateErrorCount();
+        }
+
+        isCurrentlyMismatch = true;
     }
 }
 
@@ -87,16 +123,21 @@ function reset() {
     intervalId = null;
     timer = [0, 0, 0];
     timerRunning = false;
+    errorCount = 0;
+    isCurrentlyMismatch = false;
 
     testArea.value = "";
     theTimer.textContent = "00:00:00";
     testWrapper.style.borderColor = "grey";
+    wpmElement.textContent = "0.00";
+    updateErrorCount();
     setRandomOriginText();
 }
 
 function handleTyping() {
     start();
     spellCheck();
+    updateWpm(testArea.value.length);
 }
 
 // Event listeners for keyboard input and the reset button:

@@ -168,6 +168,21 @@ body {
     flex-wrap: wrap;
 }
 
+.metrics {
+    margin-top: 1em;
+    padding: 0.75em 1em;
+    border-radius: 8px;
+    background: #f4f7fb;
+}
+
+.metrics p {
+    margin: 0;
+}
+
+.metrics p + p {
+    margin-top: 0.4em;
+}
+
 .timer {
     font-size: 3em;
     font-weight: bold;
