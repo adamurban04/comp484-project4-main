@@ -2,6 +2,7 @@ const testWrapper = document.querySelector(".test-wrapper");
 const testArea = document.querySelector("#test-area");
 const originTextElement = document.querySelector("#origin-text p");
 const resetButton = document.querySelector("#reset");
+const themeToggleButton = document.querySelector("#theme-toggle");
 const theTimer = document.querySelector(".timer");
 const wpmElement = document.querySelector("#wpm");
 const errorsElement = document.querySelector("#errors");
@@ -15,6 +16,7 @@ const originTextOptions = [
     "Obviously, the Rebel Alliance was no better. But one wrong didn't excuse another. She had probably thought about abandoning her post even before he had."
 ];
 const SCORES_STORAGE_KEY = "typing-test-top-wpm-scores";
+const THEME_STORAGE_KEY = "typing-test-theme";
 
 let timer = [0, 0, 0];
 let intervalId = null;
@@ -27,6 +29,32 @@ let wasDisqualified = false;
 function setRandomOriginText() {
     const randomIndex = Math.floor(Math.random() * originTextOptions.length);
     originTextElement.textContent = originTextOptions[randomIndex];
+}
+
+function setTheme(themeName) {
+    const isDarkTheme = themeName === "dark";
+    document.body.classList.toggle("dark-theme", isDarkTheme);
+    themeToggleButton.textContent = isDarkTheme ? "Light Theme" : "Dark Theme";
+    localStorage.setItem(THEME_STORAGE_KEY, themeName);
+}
+
+function loadThemePreference() {
+    const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
+
+    if (savedTheme === "dark" || savedTheme === "light") {
+        return savedTheme;
+    }
+
+    if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+        return "dark";
+    }
+
+    return "light";
+}
+
+function toggleTheme() {
+    const nextTheme = document.body.classList.contains("dark-theme") ? "light" : "dark";
+    setTheme(nextTheme);
 }
 
 // Add leading zero to numbers 9 or below (purely for aesthetics):
@@ -224,5 +252,7 @@ function handlePaste(event) {
 testArea.addEventListener("input", handleTyping);
 testArea.addEventListener("paste", handlePaste);
 resetButton.addEventListener("click", reset);
+themeToggleButton.addEventListener("click", toggleTheme);
+setTheme(loadThemePreference());
 setRandomOriginText();
 renderTopScores();

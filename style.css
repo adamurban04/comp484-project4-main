@@ -104,25 +104,97 @@ big {
 /*--------------------------------------------------------------
 Layout
 --------------------------------------------------------------*/
+:root {
+    --page-bg: #ffffff;
+    --page-text: #111111;
+    --masthead-bg: #0D1B2E;
+    --masthead-text: #ffffff;
+    --intro-bg: #429890;
+    --intro-text: #ffffff;
+    --origin-bg: #ededed;
+    --origin-text: #111111;
+    --metrics-bg: #f4f7fb;
+    --scoreboard-bg: #f7f7f7;
+    --panel-text: #111111;
+    --cheater-text: #b00020;
+    --textarea-bg: #ffffff;
+    --textarea-text: #111111;
+    --placeholder-text: #666666;
+    --wrapper-border: grey;
+    --reset-bg: #ffffff;
+    --reset-text: #E95D0F;
+    --reset-border: #E95D0F;
+    --reset-hover-bg: #E95D0F;
+    --reset-hover-text: #ffffff;
+    --toggle-bg: #ffffff;
+    --toggle-text: #0D1B2E;
+    --toggle-border: #ffffff;
+}
+
+body.dark-theme {
+    --page-bg: #121826;
+    --page-text: #e8ecf4;
+    --masthead-bg: #070b14;
+    --masthead-text: #f3f6fc;
+    --intro-bg: #1f5b56;
+    --intro-text: #f3f6fc;
+    --origin-bg: #1a2235;
+    --origin-text: #e8ecf4;
+    --metrics-bg: #1c2438;
+    --scoreboard-bg: #1c2438;
+    --panel-text: #e8ecf4;
+    --cheater-text: #ff8a80;
+    --textarea-bg: #0f1524;
+    --textarea-text: #f5f7fb;
+    --placeholder-text: #a0aac0;
+    --wrapper-border: #6b7280;
+    --reset-bg: #111827;
+    --reset-text: #ffae7a;
+    --reset-border: #ffae7a;
+    --reset-hover-bg: #ffae7a;
+    --reset-hover-text: #111827;
+    --toggle-bg: #111827;
+    --toggle-text: #f3f6fc;
+    --toggle-border: #f3f6fc;
+}
+
 body {
     margin: 0;
     padding: 0;
+    color: var(--page-text);
+    background-color: var(--page-bg);
 }
 
 .masthead {
     padding: 1em 2em;
-    background-color: #0D1B2E;
-    color: white;
+    background-color: var(--masthead-bg);
+    color: var(--masthead-text);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75em;
 }
 
 .masthead h1 {
     text-align: center;
+    margin: 0;
+}
+
+#theme-toggle {
+    padding: 0.4em 1em;
+    font-size: 0.95em;
+    font-weight: bold;
+    border: 2px solid var(--toggle-border);
+    border-radius: 8px;
+    background: var(--toggle-bg);
+    color: var(--toggle-text);
+    cursor: pointer;
 }
 
 .intro {
     padding: 2em 2em;
-    color: #ffffff;
-    background: #429890;
+    color: var(--intro-text);
+    background: var(--intro-bg);
 }
 
 
@@ -138,14 +210,15 @@ body {
 }
 
 .test-wrapper {
-    border: 10px solid grey;
+    border: 10px solid var(--wrapper-border);
     border-radius: 10px;
 }
 
 #origin-text {
     margin: 1em 0;
     padding: 1em 1em 0;
-    background-color: #ededed;
+    background-color: var(--origin-bg);
+    color: var(--origin-text);
 }
 
 #origin-text p {
@@ -159,6 +232,14 @@ body {
 
 .test-wrapper textarea {
     flex: 1;
+    background-color: var(--textarea-bg);
+    color: var(--textarea-text);
+    padding: 0.75em;
+    border: none;
+}
+
+.test-wrapper textarea::placeholder {
+    color: var(--placeholder-text);
 }
 
 .meta {
@@ -172,7 +253,8 @@ body {
     margin-top: 1em;
     padding: 0.75em 1em;
     border-radius: 8px;
-    background: #f4f7fb;
+    background: var(--metrics-bg);
+    color: var(--panel-text);
 }
 
 .metrics p {
@@ -185,7 +267,7 @@ body {
 
 #cheater-status {
     min-height: 1.2em;
-    color: #b00020;
+    color: var(--cheater-text);
     font-weight: bold;
 }
 
@@ -193,7 +275,8 @@ body {
     margin-top: 1em;
     padding: 0.75em 1em;
     border-radius: 8px;
-    background: #f7f7f7;
+    background: var(--scoreboard-bg);
+    color: var(--panel-text);
 }
 
 .scoreboard h2 {
@@ -219,12 +302,12 @@ body {
     padding: .5em 1em;
     font-size: 1.2em;
     font-weight: bold;
-    color: #E95D0F;
-    background: white ;
-    border: 10px solid #E95D0F;
+    color: var(--reset-text);
+    background: var(--reset-bg);
+    border: 10px solid var(--reset-border);
 }
 
 #reset:hover {
-    color: white;
-    background-color: #E95D0F;
+    color: var(--reset-hover-text);
+    background-color: var(--reset-hover-bg);
 }
