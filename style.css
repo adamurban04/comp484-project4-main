@@ -183,6 +183,33 @@ body {
     margin-top: 0.4em;
 }
 
+#cheater-status {
+    min-height: 1.2em;
+    color: #b00020;
+    font-weight: bold;
+}
+
+.scoreboard {
+    margin-top: 1em;
+    padding: 0.75em 1em;
+    border-radius: 8px;
+    background: #f7f7f7;
+}
+
+.scoreboard h2 {
+    margin: 0 0 0.4em;
+    font-size: 1.2em;
+}
+
+#top-scores {
+    margin: 0;
+    padding-left: 1.3em;
+}
+
+#top-scores li + li {
+    margin-top: 0.2em;
+}
+
 .timer {
     font-size: 3em;
     font-weight: bold;
