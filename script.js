@@ -1,23 +1,91 @@
 const testWrapper = document.querySelector(".test-wrapper");
 const testArea = document.querySelector("#test-area");
-const originText = document.querySelector("#origin-text p").innerHTML;
+const originTextElement = document.querySelector("#origin-text p");
 const resetButton = document.querySelector("#reset");
 const theTimer = document.querySelector(".timer");
 
+let timer = [0, 0, 0];
+let intervalId = null;
+let timerRunning = false;
 
 // Add leading zero to numbers 9 or below (purely for aesthetics):
+function leadingZero(time) {
+    if (time <= 9) {
+        return `0${time}`;
+    }
 
+    return `${time}`;
+}
 
 // Run a standard minute/second/hundredths timer:
+function runTimer() {
+    timer[2] += 1;
 
+    if (timer[2] >= 100) {
+        timer[2] = 0;
+        timer[1] += 1;
+    }
+
+    if (timer[1] >= 60) {
+        timer[1] = 0;
+        timer[0] += 1;
+    }
+
+    const minutes = leadingZero(timer[0]);
+    const seconds = leadingZero(timer[1]);
+    const hundredths = leadingZero(timer[2]);
+    theTimer.textContent = `${minutes}:${seconds}:${hundredths}`;
+}
 
 // Match the text entered with the provided text on the page:
+function spellCheck() {
+    const typedText = testArea.value;
+    const originText = originTextElement.textContent;
+    const textMatch = originText.substring(0, typedText.length);
 
+    if (typedText.length === 0) {
+        testWrapper.style.borderColor = "grey";
+        return;
+    }
+
+    if (typedText === originText) {
+        // Completion trigger: timer stops only when the full typed content exactly equals the full prompt text.
+        testWrapper.style.borderColor = "green";
+        clearInterval(intervalId);
+        intervalId = null;
+        timerRunning = false;
+    } else if (typedText === textMatch) {
+        testWrapper.style.borderColor = "blue";
+    } else {
+        testWrapper.style.borderColor = "#E95D0F";
+    }
+}
 
 // Start the timer:
-
+function start() {
+    if (!timerRunning && testArea.value.length > 0) {
+        intervalId = setInterval(runTimer, 10);
+        timerRunning = true;
+    }
+}
 
 // Reset everything:
+function reset() {
+    clearInterval(intervalId);
+    intervalId = null;
+    timer = [0, 0, 0];
+    timerRunning = false;
 
+    testArea.value = "";
+    theTimer.textContent = "00:00:00";
+    testWrapper.style.borderColor = "grey";
+}
+
+function handleTyping() {
+    start();
+    spellCheck();
+}
 
 // Event listeners for keyboard input and the reset button:
+testArea.addEventListener("input", handleTyping);
+resetButton.addEventListener("click", reset);
