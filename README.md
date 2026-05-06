@@ -10,10 +10,9 @@ This project is a timed typing test built with HTML, CSS, and JavaScript.
   - Blue = matching correctly so far
   - Orange = mismatch
   - Green = completed
-- Randomized origin text from 5 different paragraphs
 - Live WPM calculation
 - Live error counter
-- Top 3 score persistence in `localStorage` (using WPM as score)
+- Top 3 score persistence in `localStorage` (using WPM as score, tracked per difficulty)
 
 ### Extra Features
 - Input lock after completion until **Start over** is pressed
@@ -21,5 +20,8 @@ This project is a timed typing test built with HTML, CSS, and JavaScript.
   - Pasting into the typing area is blocked
   - If paste is attempted, the app shows **"Cheater! Pasting is disabled for this test."**
   - Disqualified runs are not saved to the top scores list
-
-
+- Dark Theme Toggle
+- Difficulty selector with separate random text pools:
+  - Easy
+  - Medium
+  - Hard

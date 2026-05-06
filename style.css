@@ -191,6 +191,31 @@ body {
     cursor: pointer;
 }
 
+.header-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75em;
+    flex-wrap: wrap;
+}
+
+.difficulty-control {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    font-size: 0.95em;
+    font-weight: bold;
+}
+
+#difficulty-select {
+    padding: 0.3em 0.5em;
+    border-radius: 8px;
+    border: 2px solid var(--toggle-border);
+    background: var(--toggle-bg);
+    color: var(--toggle-text);
+    font-weight: bold;
+}
+
 .intro {
     padding: 2em 2em;
     color: var(--intro-text);

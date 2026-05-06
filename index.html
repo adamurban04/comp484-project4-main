@@ -13,7 +13,17 @@
 <body>
     <header class="masthead">
         <h1>Test Your Typing Speed</h1>
-        <button id="theme-toggle" type="button">Dark Theme</button>
+        <div class="header-controls">
+            <button id="theme-toggle" type="button">Dark Theme</button>
+            <label for="difficulty-select" class="difficulty-control">
+                Difficulty:
+                <select id="difficulty-select" name="difficulty">
+                    <option value="easy">Easy</option>
+                    <option value="medium" selected>Medium</option>
+                    <option value="hard">Hard</option>
+                </select>
+            </label>
+        </div>
     </header>
     <main class="main">
         <article class="intro">
@@ -43,7 +53,7 @@
             </section>
 
             <section class="scoreboard" aria-label="Top three WPM scores">
-                <h2>Top 3 WPM Scores</h2>
+                <h2 id="scoreboard-title">Top 3 WPM Scores (Medium)</h2>
                 <ol id="top-scores"></ol>
             </section>
         </section><!-- .test-area -->

@@ -3,20 +3,39 @@ const testArea = document.querySelector("#test-area");
 const originTextElement = document.querySelector("#origin-text p");
 const resetButton = document.querySelector("#reset");
 const themeToggleButton = document.querySelector("#theme-toggle");
+const difficultySelect = document.querySelector("#difficulty-select");
 const theTimer = document.querySelector(".timer");
 const wpmElement = document.querySelector("#wpm");
 const errorsElement = document.querySelector("#errors");
 const cheaterStatusElement = document.querySelector("#cheater-status");
 const topScoresElement = document.querySelector("#top-scores");
-const originTextOptions = [
-    "The Empire might have demanded that they sacrifice their souls, but at one point, the majority of those people had been no worse than any others.",
-    "Although Ciena would have liked to have gone down to Cloud City, perhaps to meet Jude's parents, she remained aboard the Executor.",
-    "On Imperial ships, officers were encouraged to drink nutritive beverages instead of consuming food. It was more efficient in terms of both ship resources and officer time, and the medics insisted the nutritives were healthier, too.",
-    "Then they turned away from each other to walk into the crowd, meet new people, and become the citizens of the Empire they were always meant to be.",
-    "Obviously, the Rebel Alliance was no better. But one wrong didn't excuse another. She had probably thought about abandoning her post even before he had."
-];
-const SCORES_STORAGE_KEY = "typing-test-top-wpm-scores";
+const scoreboardTitleElement = document.querySelector("#scoreboard-title");
+const originTextByDifficulty = {
+    easy: [
+        "Typing fast is easier when your fingers stay relaxed and your eyes stay on the next word.",
+        "Practice every day for a few minutes and your speed will slowly improve.",
+        "Try to stay calm and focus on accuracy before trying to type faster.",
+        "Good posture can help your hands move more comfortably across the keyboard.",
+        "Small daily habits can build strong typing skills over time."
+    ],
+    medium: [
+        "The Empire might have demanded that they sacrifice their souls, but at one point, the majority of those people had been no worse than any others.",
+        "Although Ciena would have liked to have gone down to Cloud City, perhaps to meet Jude's parents, she remained aboard the Executor.",
+        "On Imperial ships, officers were encouraged to drink nutritive beverages instead of consuming food. It was more efficient in terms of both ship resources and officer time, and the medics insisted the nutritives were healthier, too.",
+        "Then they turned away from each other to walk into the crowd, meet new people, and become the citizens of the Empire they were always meant to be.",
+        "Obviously, the Rebel Alliance was no better. But one wrong didn't excuse another. She had probably thought about abandoning her post even before he had."
+    ],
+    hard: [
+        "Even when performance appears stable, tiny inconsistencies in timing, posture, and concentration can compound over longer sessions and create measurable drops in both speed and accuracy.",
+        "A reliable typing rhythm is not built by chasing every second, but by maintaining disciplined correction habits so mistakes are resolved immediately without interrupting overall flow.",
+        "If a typist over-focuses on one difficult phrase, they often lose sentence-level awareness, which causes delayed corrections and a chain reaction of preventable errors.",
+        "Sustained precision under pressure usually comes from deliberate practice with varied sentence structures, punctuation patterns, and word lengths rather than repetition of simple drills.",
+        "In advanced typing tests, strategic attention management matters as much as finger speed, because mentally previewing upcoming words reduces hesitation and improves consistency."
+    ]
+};
+const SCORES_STORAGE_PREFIX = "typing-test-top-wpm-scores";
 const THEME_STORAGE_KEY = "typing-test-theme";
+const DIFFICULTY_STORAGE_KEY = "typing-test-difficulty";
 
 let timer = [0, 0, 0];
 let intervalId = null;
@@ -25,10 +44,47 @@ let errorCount = 0;
 let isCurrentlyMismatch = false;
 let hasRecordedScore = false;
 let wasDisqualified = false;
+let currentDifficulty = "medium";
 
 function setRandomOriginText() {
-    const randomIndex = Math.floor(Math.random() * originTextOptions.length);
-    originTextElement.textContent = originTextOptions[randomIndex];
+    const difficultyTexts = originTextByDifficulty[currentDifficulty];
+    const randomIndex = Math.floor(Math.random() * difficultyTexts.length);
+    originTextElement.textContent = difficultyTexts[randomIndex];
+}
+
+function formatDifficultyLabel(difficultyName) {
+    return `${difficultyName.charAt(0).toUpperCase()}${difficultyName.slice(1)}`;
+}
+
+function getScoreStorageKey() {
+    return `${SCORES_STORAGE_PREFIX}-${currentDifficulty}`;
+}
+
+function setDifficulty(difficultyName) {
+    if (!originTextByDifficulty[difficultyName]) {
+        currentDifficulty = "medium";
+    } else {
+        currentDifficulty = difficultyName;
+    }
+
+    difficultySelect.value = currentDifficulty;
+    localStorage.setItem(DIFFICULTY_STORAGE_KEY, currentDifficulty);
+    renderTopScores();
+}
+
+function loadDifficultyPreference() {
+    const savedDifficulty = localStorage.getItem(DIFFICULTY_STORAGE_KEY);
+
+    if (originTextByDifficulty[savedDifficulty]) {
+        return savedDifficulty;
+    }
+
+    return "medium";
+}
+
+function handleDifficultyChange() {
+    setDifficulty(difficultySelect.value);
+    reset();
 }
 
 function setTheme(themeName) {
@@ -115,7 +171,7 @@ function setCheaterStatus(message) {
 }
 
 function loadTopScores() {
-    const savedScores = localStorage.getItem(SCORES_STORAGE_KEY);
+    const savedScores = localStorage.getItem(getScoreStorageKey());
 
     if (!savedScores) {
         return [];
@@ -129,10 +185,11 @@ function loadTopScores() {
 }
 
 function saveTopScores(scores) {
-    localStorage.setItem(SCORES_STORAGE_KEY, scores.join(","));
+    localStorage.setItem(getScoreStorageKey(), scores.join(","));
 }
 
 function renderTopScores(scores = loadTopScores()) {
+    scoreboardTitleElement.textContent = `Top 3 WPM Scores (${formatDifficultyLabel(currentDifficulty)})`;
     topScoresElement.textContent = "";
 
     if (scores.length === 0) {
@@ -253,6 +310,8 @@ testArea.addEventListener("input", handleTyping);
 testArea.addEventListener("paste", handlePaste);
 resetButton.addEventListener("click", reset);
 themeToggleButton.addEventListener("click", toggleTheme);
+difficultySelect.addEventListener("change", handleDifficultyChange);
 setTheme(loadThemePreference());
+setDifficulty(loadDifficultyPreference());
 setRandomOriginText();
 renderTopScores();
