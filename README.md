@@ -2,6 +2,8 @@
 
 This project is a timed typing test built with HTML, CSS, and JavaScript.
 
+GitHub Pages URL: https://adamurban04.github.io/comp484-project4-main/
+
 ## What I implemented
 
 - Standard timer in `mm:ss:hh` format
