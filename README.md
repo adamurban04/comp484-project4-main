@@ -27,3 +27,5 @@ GitHub Pages URL: https://adamurban04.github.io/comp484-project4-main/
   - Easy
   - Medium
   - Hard
+
+<img width="462" height="767" alt="Screenshot 2026-05-06 at 14 34 09" src="https://github.com/user-attachments/assets/ee0209eb-2f62-450e-8100-d877adf472d8" />
